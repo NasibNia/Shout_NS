@@ -35,7 +35,7 @@ module.exports = function(app){
     });
   });
 
-  app.destroy("/api/users/:id", function(req,res){
+  app.delete("/api/users/:id", function(req,res){
     db.User.destroy({
       where : {
         id : req.params.id

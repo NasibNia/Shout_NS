@@ -1,33 +1,33 @@
-var connection = require("../config.connection.js");
+// var db = require("./index.js");
 var bcrypt = require ('bcrypt-nodejs');
 module.exports = function(sequelize, DataTypes){
     var User = sequelize.define("User",{
         name : {
             type: DataTypes.STRING,
-            len:{
-                args : [0,20],
-                msg : 'Name is too long'
-                }
-            },
-        email: {
-            type: sequelize.STRING(100),
             allowNull: false,
             unique: true,
             validate: {
-              isEmail: {
-                msg: 'Not a Valid email address'
-              },
-              isUnique: connection.validateIsUnique(
-                'email',
-                'This email address already exists!'
-              )
+                len:{
+                    args : [0,10],
+                    msg : 'Name is too long'
+                    },
+                // isUnique: db.validateIsUnique(
+                //     'name',
+                //     'This name address already exists!'
+                //     )
             }
-          },
+        },
         password: {
             type : DataTypes.STRING,
             validate : {
-                len: [4],
-                isAlphanumeric: true,
+                len: {
+                    args: [5,10],
+                    msg : "password should be less than be bewtween 5 & 10 in length"
+                },
+                isAlphanumeric: {
+                    args: true,
+                    msg : 'password should contain only numbers and alphabets'
+                }
             }
         },
         location : DataTypes.STRING
@@ -43,7 +43,7 @@ module.exports = function(sequelize, DataTypes){
     });
 
     User.associate = (models) => {
-        User.belongsToMany(models.Shout, {through : {model: models.UerShout}});
+        User.belongsToMany(models.Shout, {through : {model: models.UserShout}});
     };
     return User;
 };
